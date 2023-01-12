@@ -10,8 +10,6 @@ const create = async (req, res, next) => {
   }
 };
 
-// teste
-
 const createManyEmployees = async (req, res, next) => {
   try {
     const employees = req.body;
