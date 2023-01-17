@@ -3,24 +3,28 @@ const employeeModel = require('../Models/employeeModel');
 const officeService = require('./officeServices');
 
 const employeeSchema = Joi.object({
-  firstName: Joi.string().min(2).max(45).required(),
-  lastName: Joi.string().min(2).max(45).required(),
-  office: Joi.number().required(),
+  firstName: Joi.string().min(2).max(45).required().label('firstName'),
+  lastName: Joi.string().min(2).max(45).required().label('lastName'),
+  office: Joi.number().required().label('office'),
+}).messages({
+  'string.empty': '{{#label}} cannot be empty',
+  'string.min': '{{#label}} must be at least {{#limit}} characters',
+  'string.max': '{{#label}} must be at least {{#limit}} characters',
+  'any.required': '{{#label}} is required',
 });
-
-const employeeArraySchema = Joi.array().items(employeeSchema);
 
 const create = async ({ firstName, lastName, office }) => {
   const { error } = employeeSchema.validate({ firstName, lastName, office });
   if (error) {
     throw { status: 400, message: error.message };
   }
-
+  
   const id = await employeeModel.create({ firstName, lastName, office });
   return { id, firstName, lastName, office };
 };
 
 const validateEmployeesBody = (employees) => {
+  const employeeArraySchema = Joi.array().items(employeeSchema);
   const { error } = employeeArraySchema.validate(employees);
   if (error) throw { status: 400, message: error.message };
 }
