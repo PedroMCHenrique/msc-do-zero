@@ -9,7 +9,6 @@ const PORT = process.env.APP_PORT;
 app.use(express.json());
 
 app.post('/employees', employeeController.createManyEmployees);
-
 app.post('/employee', employeeController.create);
 app.get('/employee', employeeController.getAll);
 app.get('/employee/:id', employeeController.getById);
